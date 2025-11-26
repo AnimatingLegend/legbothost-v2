@@ -29,6 +29,7 @@ Start off with `npm install`, followed by whatever dependency you need to instal
 ```
 discord.js
 @discordjs/rest
+winston
 ```
 
 ## Building
