@@ -55,6 +55,14 @@ client.once("clientReady", () => {
           ], READY TO SERVE IN ${client.guilds.cache.size} GUILD(S)
           `  
      );
+
+     client.user.setPresence({
+          status: 'idle',
+          activities: [{
+               name: `Your Commands 24/7 || Prefix: ${prefix}`,
+               type: discord.ActivityType.Watching
+          }]
+     });
 });
 // ===================================================================
 // message / prefix handler
