@@ -20,12 +20,20 @@ const client = new discord.Client({
 // initialize commands
 // find the command files, cache them, and load them
 // ==========================================================
-const prefix = 'lb-';
-
 client.commands = new discord.Collection();
 client.on('error', console.error);
 
 const commandFiles = fs.readdirSync("./public/commands").filter(file => file.endsWith('.js'));
+const commandFolders = fs.readdirSync("./public/commands").filter(folder => fs.statSync(`./public/commands/${folder}`).isDirectory());
+
+for (const folder of commandFolders) {
+     const cmdFiles_folder = fs.readdirSync(`./public/commands/${folder}`).filter(file => file.endsWith('.js'));
+
+     for (const file of cmdFiles_folder) {
+          const command = require(`./public/commands/${folder}/${file}`);
+          client.commands.set(command.data.name, command);
+     }
+}
 
 for (const file of commandFiles) {
      const command = require(`./public/commands/${file}`);
@@ -52,6 +60,8 @@ client.once("clientReady", () => {
 // message / prefix handler
 // if the message (or command) starts with the prefix (lb- or '/'), the bot will execute the command. 
 // ===================================================================
+const prefix = 'lb-';
+
 client.on('messageCreate', async (message) => {
      if (message.author.bot || !message.content.startsWith(prefix)) return;
 
