@@ -34,13 +34,11 @@ for (const folder of commandFolders) {
 
      for (const file of cmdFiles_folder) {
           const command = require(`./commands/${folder}/${file}`);
-          client.commands.set(command.data.name, command);
-     }
-}
 
-for (const file of commandFiles) {
-     const command = require(`./commands/${file}`);
-     client.commands.set(command.data.name, command);
+          if (command && command.data) {
+               client.commands.set(command.data.name, command);
+          }
+     }
 }
 
 // ===== Registering Commands =====
@@ -84,7 +82,7 @@ client.once("clientReady", () => {
      client.user.setPresence({
           status: 'idle',
           activities: [{
-               name: `${prefix}help || /help`,
+               name: `Your Commands 24/7 || ${prefix}help`,
                type: discord.ActivityType.Watching
           }]
      });
