@@ -1,6 +1,6 @@
 const discord = require("discord.js");
 
-const { token } = require("./public/api/config.json");
+const { token } = require("./src/api/config.json");
 
 const fs = require("node:fs");
 const path = require("node:path");
@@ -23,20 +23,20 @@ const client = new discord.Client({
 client.commands = new discord.Collection();
 client.on('error', console.error);
 
-const commandFiles = fs.readdirSync("./public/commands").filter(file => file.endsWith('.js'));
-const commandFolders = fs.readdirSync("./public/commands").filter(folder => fs.statSync(`./public/commands/${folder}`).isDirectory());
+const commandFiles = fs.readdirSync("./commands").filter(file => file.endsWith('.js'));
+const commandFolders = fs.readdirSync("./commands").filter(folder => fs.statSync(`./commands/${folder}`).isDirectory());
 
 for (const folder of commandFolders) {
-     const cmdFiles_folder = fs.readdirSync(`./public/commands/${folder}`).filter(file => file.endsWith('.js'));
+     const cmdFiles_folder = fs.readdirSync(`./commands/${folder}`).filter(file => file.endsWith('.js'));
 
      for (const file of cmdFiles_folder) {
-          const command = require(`./public/commands/${folder}/${file}`);
+          const command = require(`./commands/${folder}/${file}`);
           client.commands.set(command.data.name, command);
      }
 }
 
 for (const file of commandFiles) {
-     const command = require(`./public/commands/${file}`);
+     const command = require(`./commands/${file}`);
      client.commands.set(command.data.name, command);
 }
 // ===================================================================

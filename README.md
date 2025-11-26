@@ -38,21 +38,23 @@ Building is somewhat of a tricky part. we first need to add our API token.
 ### Current File Structure
 ```
 └── legbothost-v2/
-    ├── node_modules/
-    │   └── public/
-    │       ├── api/
-    │       │   └── **config.json**
-    │       └── commands/
-    │           └── about.js
+    ├── commands/
+    │   └── about.js
+    ├── node_modules
+    ├── src/
+    │   ├── api/
+    │   │   └── **config.json**
+    │   ├── utils/
+    │   │   └── utils.js
+    │   └── build.js
     ├── .gitignore
-    ├── deploy.js
     ├── main.js
     ├── package-lock.json
     ├── package.json
     └── README.md
 ```
 
-What you need to do, is go to the `public/` folder and create an `api` folder. afterwards, go into the api folder and create a file called `config.json`.
+What you need to do, is go to the `src/` folder and create an `api` folder. afterwards, go into the api folder and create a file called `config.json`.
 
 Once made, put this inside the file:
 ```

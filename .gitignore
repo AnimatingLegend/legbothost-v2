@@ -1,3 +1,3 @@
-public/api/config.json
+src/api/config.json
 node_modules/
 .env
