@@ -1,6 +1,6 @@
 const discord = require("discord.js");
-
-const { token } = require("./src/api/config.json");
+const { Routes } = require("discord.js");
+const { token, user_id } = require("./src/api/config.json");
 
 const fs = require("node:fs");
 const path = require("node:path");
@@ -23,9 +23,12 @@ const client = new discord.Client({
 client.commands = new discord.Collection();
 client.on('error', console.error);
 
+const commands = [];
+const commandsPath = path.join(__dirname, './commands');
 const commandFiles = fs.readdirSync("./commands").filter(file => file.endsWith('.js'));
 const commandFolders = fs.readdirSync("./commands").filter(folder => fs.statSync(`./commands/${folder}`).isDirectory());
 
+// ===== Loading Commands =====
 for (const folder of commandFolders) {
      const cmdFiles_folder = fs.readdirSync(`./commands/${folder}`).filter(file => file.endsWith('.js'));
 
@@ -39,12 +42,28 @@ for (const file of commandFiles) {
      const command = require(`./commands/${file}`);
      client.commands.set(command.data.name, command);
 }
+
+// ===== Registering Commands =====
+const rest = new discord.REST({ version: '10' }).setToken(token);
+
+rest
+     .put(Routes.applicationCommands(user_id), {
+          body: commands,
+     })
+     .then(() => {
+          console.log(`Successfully registered ${commands.length} application commands.`);
+     })
+     .catch((err) => {
+          console.log(err);
+     })
 // ===================================================================
 // bot is ready!
 // once the bot is ready, its gonna log its information and go online.
 // ===================================================================
 client.once("clientReady", () => {
      console.log(`
+          [${new Date().toLocaleString()}]
+          ================================================
           READY: 
           [
                username: ${client.user.username}, 
@@ -52,14 +71,20 @@ client.once("clientReady", () => {
                tag: ${client.user.tag}, 
                status: ${client.user.presence.status}, 
                commands: ${client.commands.size} 
-          ], READY TO SERVE IN ${client.guilds.cache.size} GUILD(S)
+          ], 
+          ================================================
+          READY TO SERVE IN ${client.guilds.cache.size} GUILD(S)
+          ================================================
+          CREATED BY: Aaron 'Legend' Augustin
+          ================================================
+          SOURCE CODE: https://github.com/AnimatingLegend/legbothost-v2
           `  
      );
 
      client.user.setPresence({
           status: 'idle',
           activities: [{
-               name: `Your Commands 24/7 || Prefix: ${prefix}`,
+               name: `${prefix}help || /help`,
                type: discord.ActivityType.Watching
           }]
      });
@@ -70,6 +95,7 @@ client.once("clientReady", () => {
 // ===================================================================
 const prefix = 'lb-';
 
+// ===== Message Handler =====
 client.on('messageCreate', async (message) => {
      if (message.author.bot || !message.content.startsWith(prefix)) return;
 
@@ -86,6 +112,7 @@ client.on('messageCreate', async (message) => {
      }
 });
 
+// ===== Interaction Handler =====
 client.on('interactionCreate', async (interaction) => {
      if (!interaction.isChatInputCommand()) return;
 
