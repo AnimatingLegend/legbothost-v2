@@ -1,0 +1,21 @@
+{
+  "name": "legbot-v2",
+  "version": "2.0.0",
+  "description": "N/A",
+  "keywords": [
+    "legbot",
+    "legbot-v2",
+    "legbot_client"
+  ],
+  "license": "ISC",
+  "author": "Aaron Augustin",
+  "type": "commonjs",
+  "main": "main.js",
+  "scripts": {
+    "test": "legbot --test"
+  },
+  "dependencies": {
+    "@discordjs/rest": "^2.6.0",
+    "discord.js": "^14.25.1"
+  }
+}
